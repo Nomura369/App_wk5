@@ -1,22 +1,65 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import AlbumScreen from '../screens/AlbumScreen';
 import DetailScreen from '../screens/DetailScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 import albumData from "../json/albums.json";
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <StackNavigator />
+      <BottomTabNavigator />
     </NavigationContainer>
   );
 }
 
-const StackNavigator = () => {
+const BottomTabNavigator =() => {
+  return(
+    <Tab.Navigator
+      initialRouteName="HomeStack"
+      screenOptions={{
+        tabBarActiveTintColor: '#e91e63',
+        // headerShown: false
+      }}
+    >
+      <Tab.Screen 
+        name="HomeStack" 
+        component={HomeStack}
+        options={{
+          headerShown: false,
+          title: "Home",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="home" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen 
+        name="Settings" 
+        component={SettingsScreen} 
+        options={{
+          title: "Settings",
+          headerTitleStyle: {
+            fontWeight: '400',
+            fontSize: 20
+          },
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="cog" color={color} size={26} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
+const HomeStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
