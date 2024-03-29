@@ -1,13 +1,16 @@
-import { Text, Center } from "@gluestack-ui/themed";
+import { Box } from "@gluestack-ui/themed";
+import ListItem from "../components/ListItem";
 
 const SettingsScreen = () => {
-    return (
-    <Center bg="emerald.100" flex={1}>
-        <Text fontSize={30}>
-            This is a Setting Page.
-        </Text>              
-    </Center>
-    );
-}
+  return (
+    <Box mt="$1" borderBottomWidth="$1" borderColor="lightgray">
+      <ListItem
+        title="Display"
+        destination="DisplaySetting"
+      />
+      <ListItem title="Account" />
+    </Box>
+  );
+};
 
 export default SettingsScreen;

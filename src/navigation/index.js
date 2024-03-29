@@ -1,13 +1,14 @@
 import { NavigationContainer, useTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MyTheme } from "../theme"
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import AlbumScreen from '../screens/AlbumScreen';
 import DetailScreen from '../screens/DetailScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import DisplaySettingScreen from '../screens/DisplaySettingScreen';
+import MyTheme from '../theme';
 
 import albumData from "../json/albums.json";
 
@@ -46,13 +47,10 @@ const BottomTabNavigator =() => {
       />
       <Tab.Screen 
         name="Settings" 
-        component={SettingsScreen} 
+        component={SettingsStack} 
         options={{
+          headerShown: false,
           title: "Settings",
-          headerTitleStyle: {
-            fontWeight: '400',
-            fontSize: 20
-          },
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="cog" color={color} size={26} />
           ),
@@ -61,6 +59,35 @@ const BottomTabNavigator =() => {
     </Tab.Navigator>
   );
 };
+
+const SettingsStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          title: "Settings",
+          headerTitleStyle: {
+            fontWeight: '400',
+            fontSize: 20
+          },
+        }}
+      />
+      <Stack.Screen
+        name="DisplaySetting"
+        component={DisplaySettingScreen}
+        options={{
+          title: "Display",
+          headerTitleStyle: {
+            fontWeight: '400',
+            fontSize: 20
+          },
+        }}
+      />
+    </Stack.Navigator>    
+  );
+}
 
 const HomeStack = () => {
   return (
