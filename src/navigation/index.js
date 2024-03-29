@@ -1,9 +1,16 @@
 import { NavigationContainer, useTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import { Divider, Image, Input, HStack, Text } from '@gluestack-ui/themed';
 
 import AlbumScreen from '../screens/AlbumScreen';
 import DetailScreen from '../screens/DetailScreen';
@@ -20,44 +27,91 @@ const Drawer = createDrawerNavigator();
 const Navigation = () => {
   return (
     <NavigationContainer theme={MyTheme}>
-      <DrawerNavigator />
+      <MyDrawer />
     </NavigationContainer>
   );
 }
 
-const DrawerNavigator = () => {
+const CustomDrawerContent = (props) => {
+  const { colors } = useTheme();
+
   return (
-    <Drawer.Navigator initialRouteName="HomeStack">
-      <Drawer.Screen 
-        name="HomeStack" 
-        component={HomeStack} 
+    <DrawerContentScrollView {...props}
+      contentContainerStyle={{ paddingTop: 0 }}
+    >
+      <Image
+        h={250}
+        w="100%"
+        source={require("../images/drawerTile.jpg")}
+        alt='albumImage'
+      />
+      <DrawerItemList {...props} />
+      <Divider my="$2"/>
+      <DrawerItem 
+        label="Help"
+        activeBackgroundColor={colors.primary100}
+        activeTintColor={colors.primary700}
+        inactiveTintColor={colors.light500}
+        labelStyle={ {fontSize: 18, fontWeight: '400'} }
+        icon={({ color }) => (
+          <MaterialCommunityIcons name="account-question" color={color} size={26} />
+        )}
+        onPress={()=>alert('Need Help ...')}
+      />
+      <HStack pl="$4" alignItems="center">
+        <MaterialCommunityIcons name="magnify" color={colors.light500} size={26} />
+        <Input mx="$3" fontSize={18} placeholder="Input Search Text" flex={1} />
+      </HStack>
+
+    </DrawerContentScrollView>
+  );
+}
+
+const MyDrawer = () => {
+  const { colors } = useTheme();
+
+  return (
+    <Drawer.Navigator
+      initialRouteName="HomeStack"
+      screenOptions={{
+        drawerActiveBackgroundColor: colors.primary100,
+        drawerActiveTintColor: colors.primary700,
+        drawerInactiveTintColor: colors.light500,
+        drawerStyle: { width: 250 },
+        drawerLabelStyle: { fontSize: 18, fontWeight: '400' },
+      }}
+      drawerContent={props => <CustomDrawerContent {...props} />}
+    >
+      <Drawer.Screen
+        name="HomeStack"
+        component={HomeStack}
         options={{
           headerShown: false,
-          title: "Home",
-          tabBarIcon: ({ color }) => (
+          drawerLabel: "Home",
+          drawerIcon: ({ color }) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
         }}
       />
-      <Drawer.Screen 
-        name="SettingsStack" 
-        component={SettingsStack} 
+      <Drawer.Screen
+        name="SettingsStack"
+        component={SettingsStack}
         options={{
           headerShown: false,
-          title: "Settings",
-          headerTitleStyle: {
-            fontWeight: '400',
-            fontSize: 20
-          },
+          drawerLabel: "Settings",
+          drawerIcon: ({ color }) => (
+            <MaterialCommunityIcons name="cog" color={color} size={26} />
+          ),
         }}
       />
     </Drawer.Navigator>
-  );  
+  );
 }
 
-const BottomTabNavigator =() => {
+const MyTabs = () => {
   const { colors } = useTheme();
-  return(
+
+  return (
     <Tab.Navigator
       initialRouteName="HomeStack"
       screenOptions={{
@@ -66,8 +120,8 @@ const BottomTabNavigator =() => {
         // headerShown: false
       }}
     >
-      <Tab.Screen 
-        name="HomeStack" 
+      <Tab.Screen
+        name="HomeStack"
         component={HomeStack}
         options={{
           headerShown: false,
@@ -77,12 +131,16 @@ const BottomTabNavigator =() => {
           ),
         }}
       />
-      <Tab.Screen 
-        name="Settings" 
-        component={SettingsStack} 
+      <Tab.Screen
+        name="SettingsStack"
+        component={SettingsStack}
         options={{
           headerShown: false,
           title: "Settings",
+          headerTitleStyle: {
+            fontWeight: '400',
+            fontSize: 20
+          },
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="cog" color={color} size={26} />
           ),
@@ -90,9 +148,9 @@ const BottomTabNavigator =() => {
       />
     </Tab.Navigator>
   );
-};
+}
 
-const SettingsStack = ({navigation}) => {
+const SettingsStack = ({ navigation }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -105,13 +163,13 @@ const SettingsStack = ({navigation}) => {
             fontSize: 20
           },
           headerLeft: () => (
-            <MaterialCommunityIcons 
-              name={'menu'} 
-              size={20} 
+            <MaterialCommunityIcons
+              name={'menu'}
+              size={20}
               onPress={() => navigation.openDrawer()}
-              style={{marginRight: 20}}
-            /> 
-          ), 
+              style={{ marginRight: 20 }}
+            />
+          ),
         }}
       />
       <Stack.Screen
@@ -125,13 +183,18 @@ const SettingsStack = ({navigation}) => {
           },
         }}
       />
-    </Stack.Navigator>    
+    </Stack.Navigator>
   );
 }
 
-const HomeStack = ({navigation}) => {
+const HomeStack = ({ navigation }) => {
+
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+    // screenOptions={{
+    //   headerShown: false
+    // }}
+    >
       <Stack.Screen
         name="Home"
         component={AlbumScreen}
@@ -142,13 +205,13 @@ const HomeStack = ({navigation}) => {
             fontSize: 20
           },
           headerLeft: () => (
-            <MaterialCommunityIcons 
-              name={'menu'} 
-              size={20} 
+            <MaterialCommunityIcons
+              name={'menu'}
+              size={20}
               onPress={() => navigation.openDrawer()}
-              style={{marginRight: 20}}
-            /> 
-          ), 
+              style={{ marginRight: 20 }}
+            />
+          ),
         }}
       />
       <Stack.Screen
