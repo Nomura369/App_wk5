@@ -1,6 +1,7 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MyTheme } from "../theme"
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -15,18 +16,20 @@ const Tab = createBottomTabNavigator();
 
 const Navigation = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <BottomTabNavigator />
     </NavigationContainer>
   );
 }
 
 const BottomTabNavigator =() => {
+  const { colors } = useTheme();
   return(
     <Tab.Navigator
       initialRouteName="HomeStack"
       screenOptions={{
-        tabBarActiveTintColor: '#e91e63',
+        tabBarInactiveTintColor: colors.light500,
+        tabBarActiveTintColor: colors.primary700,
         // headerShown: false
       }}
     >
