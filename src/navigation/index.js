@@ -1,6 +1,7 @@
 import { NavigationContainer, useTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -14,13 +15,44 @@ import albumData from "../json/albums.json";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 const Navigation = () => {
   return (
     <NavigationContainer theme={MyTheme}>
-      <BottomTabNavigator />
+      <DrawerNavigator />
     </NavigationContainer>
   );
+}
+
+const DrawerNavigator = () => {
+  return (
+    <Drawer.Navigator initialRouteName="HomeStack">
+      <Drawer.Screen 
+        name="HomeStack" 
+        component={HomeStack} 
+        options={{
+          headerShown: false,
+          title: "Home",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="home" color={color} size={26} />
+          ),
+        }}
+      />
+      <Drawer.Screen 
+        name="SettingsStack" 
+        component={SettingsStack} 
+        options={{
+          headerShown: false,
+          title: "Settings",
+          headerTitleStyle: {
+            fontWeight: '400',
+            fontSize: 20
+          },
+        }}
+      />
+    </Drawer.Navigator>
+  );  
 }
 
 const BottomTabNavigator =() => {
@@ -60,7 +92,7 @@ const BottomTabNavigator =() => {
   );
 };
 
-const SettingsStack = () => {
+const SettingsStack = ({navigation}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -72,6 +104,14 @@ const SettingsStack = () => {
             fontWeight: '400',
             fontSize: 20
           },
+          headerLeft: () => (
+            <MaterialCommunityIcons 
+              name={'menu'} 
+              size={20} 
+              onPress={() => navigation.openDrawer()}
+              style={{marginRight: 20}}
+            /> 
+          ), 
         }}
       />
       <Stack.Screen
@@ -89,7 +129,7 @@ const SettingsStack = () => {
   );
 }
 
-const HomeStack = () => {
+const HomeStack = ({navigation}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -101,6 +141,14 @@ const HomeStack = () => {
             fontWeight: '400',
             fontSize: 20
           },
+          headerLeft: () => (
+            <MaterialCommunityIcons 
+              name={'menu'} 
+              size={20} 
+              onPress={() => navigation.openDrawer()}
+              style={{marginRight: 20}}
+            /> 
+          ), 
         }}
       />
       <Stack.Screen
